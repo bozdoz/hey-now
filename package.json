@@ -1,0 +1,26 @@
+{
+  "name": "hey-now",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./src/index.js"
+  },
+  "bin": "./src/index.js",
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "meow": "^6.1.0",
+    "puppeteer": "^3.0.2"
+  },
+  "prettier": {
+    "tabWidth": 2,
+    "singleQuote": true
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2",
+    "prettier": "^2.0.5"
+  }
+}
