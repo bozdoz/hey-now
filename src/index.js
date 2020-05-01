@@ -1,8 +1,10 @@
 #!/usr/bin/env node
 const meow = require('meow');
+const chalk = require('chalk');
 const app = require('./app');
 
-const cli = meow(`
+const cli = meow(`${chalk.black.bgGreenBright(' HEY NOW ')}
+
   Usage
     $ npm start <service> "<friend>"
 
