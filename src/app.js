@@ -13,10 +13,10 @@ Some
 🎵...body once told me
 The world 🌎 was gonna roll me
 I ain't the sharpest tool 🔨 in the sheeeead 🏚
-She was looking kinda dumb 🙆‍♀️
+She was looking 👀 kinda dumb 🙆‍♀️
 With her finger and her thumb 👌
-In the shape
-Of an "L"
+In the shape ❓
+Of an "L" ❗️
 On her forehead 🙀
 `;
 
