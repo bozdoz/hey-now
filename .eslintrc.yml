@@ -19,4 +19,6 @@ rules:
     no-underscore-dangle: 0,
     prefer-destructuring: 0,
     no-unused-vars: 1,
+    global-require: 0,
+    class-methods-use-this: 0,
   }
