@@ -1,14 +1,10 @@
 const {
   errors: { TimeoutError },
 } = require('puppeteer');
+const Service = require('./Service');
 const { wait } = require('../util');
 
-class Hangouts {
-  constructor(page) {
-    /** @type {import('puppeteer').Page>} */
-    this.page = page;
-  }
-
+class Hangouts extends Service {
   async ready() {
     await this.page.goto('https://hangouts.google.com');
     try {
@@ -32,9 +28,7 @@ class Hangouts {
     const clickFriend = async () => {
       const selector = `[title="${friend}"]`;
       await this.friendFrame.waitForSelector(selector);
-      const elem = await this.friendFrame.$(selector);
-
-      await elem.click();
+      await this.friendFrame.click(selector);
     };
 
     // click friend name
@@ -46,11 +40,6 @@ class Hangouts {
 
     // not sure, but can't find .editable in iframe[aria-label=${friend}]
     await wait(500);
-  }
-
-  async sendMessage(message) {
-    await this.page.keyboard.type(message);
-    await this.page.keyboard.press('Enter');
   }
 
   async getFrame(selector) {

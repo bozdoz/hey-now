@@ -1,11 +1,11 @@
 const getPage = require('./getPage');
-const { wait, wordCount } = require('./util');
-const WhatsApp = require('./services/WhatsApp');
-const Hangouts = require('./services/Hangouts');
+const { wait } = require('./util');
 
 const services = {
-  whatsapp: WhatsApp,
-  hangouts: Hangouts,
+  whatsapp: require('./services/WhatsApp'),
+  hangouts: require('./services/Hangouts'),
+  messenger: require('./services/Messenger'),
+  slack: require('./services/Slack'),
 };
 
 const MESSAGE = `
@@ -34,15 +34,22 @@ const app = async ({ friend, service }) => {
   }
 
   if (!service) {
-    throw new Error('service not supplied: hangouts, whatsapp');
+    throw new Error(
+      `service not supplied: ${Object.keys(services).join(', ')}`
+    );
+  }
+
+  const Service = services[service];
+
+  if (!Service) {
+    throw new Error(
+      `service not found: ${service}; options: ${Object.keys(services).join(
+        ', '
+      )}`
+    );
   }
 
   const page = await getPage();
-  const Service = services[service];
-
-  if (!service) {
-    throw new Error(`service not found: ${service}`);
-  }
   const program = new Service(page);
 
   await program.ready();
@@ -51,13 +58,14 @@ const app = async ({ friend, service }) => {
 
   for (const message of messages) {
     await program.sendMessage(message);
-    // try to get a good beat, by waiting a certain amount for each word
-    await wait(wordCount(message) * 600);
   }
 
   // keep up with that tempo
-  await wait(1200);
+  await wait(1400);
   await program.sendMessage('WELL');
+
+  // wow; gotta wait for the last message to send apparently
+  await wait(1000);
 };
 
 module.exports = app;

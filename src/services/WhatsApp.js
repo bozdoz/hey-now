@@ -1,13 +1,9 @@
 const {
   errors: { TimeoutError },
 } = require('puppeteer');
+const Service = require('./Service');
 
-class WhatsApp {
-  constructor(page) {
-    /** @type {import('puppeteer').Page>} */
-    this.page = page;
-  }
-
+class WhatsApp extends Service {
   async ready() {
     await this.page.goto('https://web.whatsapp.com');
     try {
@@ -39,11 +35,6 @@ class WhatsApp {
 
     // click message box
     await clickOnText('Type a message');
-  }
-
-  async sendMessage(message) {
-    await this.page.keyboard.type(message);
-    await this.page.keyboard.press('Enter');
   }
 }
 
