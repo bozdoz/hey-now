@@ -3,13 +3,12 @@ const {
 } = require('puppeteer');
 const chalk = require('chalk');
 const Service = require('./Service');
-const { getConfig, wait, wordCount } = require('../util');
+const { wait, wordCount } = require('../util');
+const { getConfig } = require('../config');
 
 class Slack extends Service {
   async ready() {
-    const config = getConfig();
-    /** @type {string} */
-    let slackUrl = config.slackUrl;
+    let { slackUrl } = getConfig();
 
     if (slackUrl && !slackUrl.startsWith('http')) {
       slackUrl = `https://${slackUrl}`;
@@ -22,10 +21,7 @@ class Slack extends Service {
     }
 
     // get slack url
-    await this.page.goto(slackUrl, {
-      waitUntil: 'networkidle2',
-      timeout: 0,
-    });
+    await this.page.goto(slackUrl);
 
     // check if login
     try {
@@ -37,7 +33,7 @@ class Slack extends Service {
         console.error(
           `${chalk.red(
             'You must login first!'
-          )} Set headless to false, and login with your credentials; click Remember me`
+          )} Try again with --no-headless, login with your credentials, and click Remember me`
         );
         await wait(100000);
       }
@@ -51,7 +47,7 @@ class Slack extends Service {
       if (e instanceof TimeoutError) {
         // eslint-disable-next-line no-console
         console.error(
-          'TimeoutError: You may need to sign in; make sure the browser in getPage is set to `headless: false`'
+          'TimeoutError: You may need to sign in; try again with --no-headless'
         );
       }
       throw e;

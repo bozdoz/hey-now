@@ -2,6 +2,7 @@
 const meow = require('meow');
 const chalk = require('chalk');
 const app = require('./app');
+const { setConfig } = require('./config');
 
 const cli = meow(`${chalk.black.bgGreenBright(' HEY NOW ')}
 
@@ -26,8 +27,13 @@ if (cli.input.length !== 2) {
 
 const [service, friend] = cli.input;
 
+setConfig(cli.flags);
+
+// TODO conditionally exit process
 app({
   service,
   friend,
+})
+  .then(() => process.exit(0))
   // eslint-disable-next-line no-console
-}).catch((e) => console.error(e) || cli.showHelp(0));
+  .catch((e) => console.error(chalk.red(e.message)) || process.exit(0));

@@ -13,7 +13,7 @@ class Hangouts extends Service {
       if (e instanceof TimeoutError) {
         // eslint-disable-next-line no-console
         console.error(
-          'TimeoutError: You may need to sign in; make sure the browser in getPage is set to `headless: false`; also, you may need to open a new tab if you get an insecure browser error.'
+          'TimeoutError: You may need to sign in; try again with --no-headless; also, you may need to open a new tab if you get an insecure browser error.'
         );
       }
       throw e;

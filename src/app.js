@@ -64,7 +64,7 @@ const app = async ({ friend, service }) => {
   await wait(1400);
   await program.sendMessage('WELL');
 
-  // wow; gotta wait for the last message to send apparently
+  // wow: gotta wait for the last message to send apparently
   await wait(1000);
 };
 

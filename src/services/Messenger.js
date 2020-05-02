@@ -13,7 +13,7 @@ class Messenger extends Service {
       if (e instanceof TimeoutError) {
         // eslint-disable-next-line no-console
         console.error(
-          'TimeoutError: You may need to login (and click Remember Me); make sure the browser in getPage is set to `headless: false`'
+          'TimeoutError: You may need to login (and click Remember Me); try again with --no-headless'
         );
       }
       throw e;

@@ -12,7 +12,7 @@ class WhatsApp extends Service {
       if (e instanceof TimeoutError) {
         // eslint-disable-next-line no-console
         console.error(
-          'TimeoutError: You may need to scan the QR code with your phone; make sure the browser in getPage is set to `headless: false`'
+          'TimeoutError: You may need to scan the QR code with your phone; try again with --no-headless'
         );
       }
       throw e;
