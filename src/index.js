@@ -9,15 +9,22 @@ const cli = meow(`${chalk.black.bgGreenBright(' HEY NOW ')}
   Usage
     $ npm start <service> "<friend>"
 
+  Options
+    --slack-url
+      provide a URL for slack
+
+    --no-headless
+      open a browser window
+
   Input
     service   
-      whatsapp | hangouts
+      whatsapp | hangouts | messenger | slack
     
     friend    
       case-sensitive name of friend as it appears on your chosen service
 
   Examples
-    $ npm start whatsapp "Dakota Childd"
+    $ hey-now whatsapp "Dakota Childd"
 `);
 
 if (cli.input.length !== 2) {
