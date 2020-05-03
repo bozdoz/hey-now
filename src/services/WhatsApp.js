@@ -4,7 +4,7 @@ const {
 const Service = require('./Service');
 
 class WhatsApp extends Service {
-  async ready() {
+  async navigateToURL() {
     await this.page.goto('https://web.whatsapp.com');
     try {
       await this.page.waitForSelector('.app');
@@ -19,7 +19,7 @@ class WhatsApp extends Service {
     }
   }
 
-  async messageFriend(friend) {
+  async findMessageBox(friend) {
     const clickOnText = async (text) => {
       const elems = await this.page.$x(`//*[contains(text(), '${text}')]`);
 

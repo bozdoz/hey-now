@@ -5,7 +5,7 @@ const Service = require('./Service');
 const { wait } = require('../util');
 
 class Hangouts extends Service {
-  async ready() {
+  async navigateToURL() {
     await this.page.goto('https://hangouts.google.com');
     try {
       this.friendFrame = await this.getFrame('#hangout-landing-chat > iframe');
@@ -15,12 +15,13 @@ class Hangouts extends Service {
         console.error(
           'TimeoutError: You may need to sign in; try again with --no-headless; also, you may need to open a new tab if you get an insecure browser error.'
         );
+        // TODO use https://www.npmjs.com/package/prompt to ask for username/password
       }
       throw e;
     }
   }
 
-  async messageFriend(friend) {
+  async findMessageBox(friend) {
     if (!this.friendFrame) {
       throw new Error('Friend frame does not exist');
     }

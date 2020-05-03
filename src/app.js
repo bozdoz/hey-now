@@ -26,7 +26,9 @@ const messages = MESSAGE.trim()
   .map((a) => a.trim());
 
 /**
- * @param {string} friend  Name as it appears
+ * @param {Object} obj
+ * @param {string} obj.friend - Name of friend
+ * @param {keyof services} obj.service - Name of friend
  */
 const app = async ({ friend, service }) => {
   if (!friend) {
@@ -49,12 +51,14 @@ const app = async ({ friend, service }) => {
     );
   }
 
+  // we can't have an asynchronous constructor, so we initialize and pass
+  // page here, to reduce duplication;
   const page = await getPage();
   const program = new Service(page);
 
-  await program.ready();
+  await program.navigateToURL();
 
-  await program.messageFriend(friend);
+  await program.findMessageBox(friend);
 
   for (const message of messages) {
     await program.sendMessage(message);

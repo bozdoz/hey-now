@@ -7,7 +7,7 @@ const { wait, wordCount } = require('../util');
 const { getConfig } = require('../config');
 
 class Slack extends Service {
-  async ready() {
+  async navigateToURL() {
     let { slackUrl } = getConfig();
 
     if (slackUrl && !slackUrl.startsWith('http')) {
@@ -35,6 +35,7 @@ class Slack extends Service {
             'You must login first!'
           )} Try again with --no-headless, login with your credentials, and click Remember me`
         );
+        // TODO use https://www.npmjs.com/package/prompt to ask for username/password
         await wait(100000);
       }
     } catch (e) {
@@ -58,7 +59,7 @@ class Slack extends Service {
    * Get the textbox ready for a friend's message
    * @param {string} friend
    */
-  async messageFriend(friend) {
+  async findMessageBox(friend) {
     const { page } = this;
     // need to create new message; can't just find name
     await page.click('button[aria-label="New message"]');

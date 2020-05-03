@@ -6,15 +6,18 @@ class Service {
     this.page = page;
   }
 
-  ready() {
-    throw new Error('Method ready must be implemented');
+  /**
+   * Navigate to URL, and make sure we're logged in
+   */
+  navigateToURL() {
+    throw new Error('Method navigateToURL must be implemented');
   }
 
   /**
    * Prepare text box in order to send message to friend
    */
-  messageFriend() {
-    throw new Error('Method messageFriend must be implemented');
+  findMessageBox() {
+    throw new Error('Method findMessageBox must be implemented');
   }
 
   /**

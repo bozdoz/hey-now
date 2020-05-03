@@ -5,7 +5,7 @@ const { wait } = require('../util');
 const Service = require('./Service');
 
 class Messenger extends Service {
-  async ready() {
+  async navigateToURL() {
     await this.page.goto('https://messenger.com');
     try {
       await this.page.waitForSelector('[aria-label="Conversations"]');
@@ -15,12 +15,13 @@ class Messenger extends Service {
         console.error(
           'TimeoutError: You may need to login (and click Remember Me); try again with --no-headless'
         );
+        // TODO use https://www.npmjs.com/package/prompt to ask for username/password
       }
       throw e;
     }
   }
 
-  async messageFriend(friend) {
+  async findMessageBox(friend) {
     const waitForAndClick = async (selector) => {
       await this.page.waitForSelector(selector);
       await this.page.click(selector);
