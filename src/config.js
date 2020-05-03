@@ -1,9 +1,13 @@
 // mutable store for config
 let config = {
-  /** --slack-url in the cli */
+  /** --slack-url in cli */
   slackUrl: process.env.SLACK_URL,
   /** --no-headless in cli */
   headless: true,
+  /** --firefox in cli */
+  firefox: false,
+  /** --executable-path in cli */
+  executablePath: '',
 };
 const getConfig = () => config;
 

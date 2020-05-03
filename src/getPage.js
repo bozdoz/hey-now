@@ -3,22 +3,34 @@ const { getConfig } = require('./config');
 
 /** whether to actually launch a window or not */
 const getPage = async () => {
-  // TODO: optional Firefox or Brave or Edge, etc
-  // const browserFetcher = puppeteer.createBrowserFetcher({
-  //   product: 'firefox',
-  // });
-  // const revisionInfo = await browserFetcher.download('77');
+  const { firefox, headless, executablePath } = getConfig();
 
-  const browser = await puppeteer.launch({
-    // executablePath: revisionInfo.executablePath,
-    // product: 'firefox',
-    headless: getConfig().headless,
+  /** @type {puppeteer.LaunchOptions} */
+  const options = {
+    headless,
     // user data dir saves logins, cookies, etc
     userDataDir: '~/.puppeteer-user',
     handleSIGINT: false,
     args: ['--no-default-browser-check'],
     ignoreDefaultArgs: ['--enable-automation'],
-  });
+  };
+
+  if (firefox) {
+    const browserFetcher = puppeteer.createBrowserFetcher({
+      product: 'firefox',
+    });
+    const revisionInfo = await browserFetcher.download('77');
+
+    options.executablePath = revisionInfo.executablePath;
+    options.product = 'firefox';
+  }
+
+  // adds any chromium/firefox(?) product
+  if (executablePath) {
+    options.executablePath = executablePath;
+  }
+
+  const browser = await puppeteer.launch(options);
 
   // don't throw errors if user cancels
   process.on('SIGINT', () =>
@@ -28,9 +40,9 @@ const getPage = async () => {
       .catch(() => process.exit(0))
   );
 
-  // no need to open a new page; browser starts with one
+  // no need to open a new page if browser starts with one
   const pages = await browser.pages();
-  const page = pages[0];
+  const page = pages[0] || (await browser.newPage());
 
   page.on('close', () => process.exit(0));
 
