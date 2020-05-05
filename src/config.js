@@ -9,6 +9,7 @@ let config = {
   /** --executable-path in cli */
   executablePath: '',
 };
+
 const getConfig = () => config;
 
 const setConfig = (obj) => {

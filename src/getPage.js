@@ -1,7 +1,6 @@
 const puppeteer = require('puppeteer');
 const { getConfig } = require('./config');
 
-/** whether to actually launch a window or not */
 const getPage = async () => {
   const { firefox, headless, executablePath } = getConfig();
 
