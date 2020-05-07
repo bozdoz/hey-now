@@ -1,16 +1,23 @@
+const path = require('path');
 const puppeteer = require('puppeteer');
 const { getConfig } = require('./config');
+const logger = require('./logger');
+const { setCookies } = require('./cookies');
+
+const log = logger('getPage');
 
 const getPage = async () => {
   const { firefox, headless, executablePath } = getConfig();
 
+  // user data dir saves logins, cookies, etc
+  const userDataDir = path.resolve('.puppeteer-user');
+
+  log('using userDataDir', userDataDir);
+
   /** @type {puppeteer.LaunchOptions} */
   const options = {
     headless,
-    // user data dir saves logins, cookies, etc
-    userDataDir: '~/.puppeteer-user',
-    handleSIGINT: false,
-    args: ['--no-default-browser-check'],
+    args: ['--no-default-browser-check', `--user-data-dir=${userDataDir}`],
     ignoreDefaultArgs: ['--enable-automation'],
   };
 
@@ -31,19 +38,10 @@ const getPage = async () => {
 
   const browser = await puppeteer.launch(options);
 
-  // don't throw errors if user cancels
-  process.on('SIGINT', () =>
-    browser
-      .close()
-      .then(() => process.exit(0))
-      .catch(() => process.exit(0))
-  );
+  const page = await browser.newPage();
 
-  // no need to open a new page if browser starts with one
-  const pages = await browser.pages();
-  const page = pages[0] || (await browser.newPage());
-
-  page.on('close', () => process.exit(0));
+  // set cookies for headless-forgetfulness
+  await setCookies(page);
 
   return page;
 };
