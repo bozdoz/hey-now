@@ -8,6 +8,8 @@ let config = {
   firefox: false,
   /** --executable-path in cli */
   executablePath: '',
+  /** --debug */
+  debug: false,
 };
 
 const getConfig = () => config;
