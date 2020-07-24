@@ -1,4 +1,3 @@
-const getPage = require('./getPage');
 const { wait } = require('./util');
 
 const services = {

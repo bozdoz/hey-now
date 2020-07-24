@@ -29,13 +29,13 @@ class WhatsApp extends Service {
     }
 
     try {
-      await this.screenshot('before-app.png');
+      await this.debugScreenshot('before-app.png');
       await page.waitForSelector(appSelector);
       // kills the looping QR code script
       this.scanned = true;
-      await this.screenshot('after-app.png');
+      await this.debugScreenshot('after-app.png');
     } catch (e) {
-      await this.screenshot('app-timeout.png');
+      await this.debugScreenshot('app-timeout.png');
       if (e instanceof TimeoutError) {
         // eslint-disable-next-line no-console
         console.error(

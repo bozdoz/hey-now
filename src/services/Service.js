@@ -3,6 +3,7 @@ const path = require('path');
 const { wait, wordCount } = require('../util');
 const getPage = require('../getPage');
 const logger = require('../logger');
+const { getConfig } = require('../config');
 
 const log = logger('Service');
 
@@ -43,7 +44,14 @@ class Service {
     await wait(wordCount(message) * 600);
   }
 
-  async screenshot(filename) {
+  async debugScreenshot(filename) {
+    const { debug } = getConfig();
+
+    if (!debug) {
+      // screenshot is for debugging
+      return;
+    }
+
     const img = path.join('screenshots', filename);
 
     fs.mkdirSync('screenshots', {
