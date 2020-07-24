@@ -1,47 +1,39 @@
 const path = require('path');
-const puppeteer = require('puppeteer');
+const puppeteer = require('puppeteer-core');
 const { getConfig } = require('./config');
+const getChromeVersion = require('./getChromeVersion');
+const { DEFAULT_CHROMIUM_ARGS } = require('./constants');
 const logger = require('./logger');
-const { setCookies } = require('./cookies');
 
 const log = logger('getPage');
 
-const getPage = async () => {
-  const { firefox, headless, executablePath } = getConfig();
+const getPage = async (url) => {
+  const { headless, executablePath } = getConfig();
 
   // user data dir saves logins, cookies, etc
   const userDataDir = path.resolve('.puppeteer-user');
-
-  log('using userDataDir', userDataDir);
+  // --app removes toolbars etc
+  const args = [...DEFAULT_CHROMIUM_ARGS, `--app=${url}`];
 
   /** @type {puppeteer.LaunchOptions} */
   const options = {
+    args,
     headless,
-    args: ['--no-default-browser-check', `--user-data-dir=${userDataDir}`],
-    ignoreDefaultArgs: ['--enable-automation'],
+    userDataDir,
+    devtools: false,
+    executablePath: executablePath || (await getChromeVersion()),
   };
 
-  if (firefox) {
-    const browserFetcher = puppeteer.createBrowserFetcher({
-      product: 'firefox',
-    });
-    const revisionInfo = await browserFetcher.download('77');
-
-    options.executablePath = revisionInfo.executablePath;
-    options.product = 'firefox';
-  }
-
-  // adds any chromium/firefox(?) product
-  if (executablePath) {
-    options.executablePath = executablePath;
-  }
+  log(options);
 
   const browser = await puppeteer.launch(options);
+  /** @type {import('puppeteer-core').Page} */
+  const page = browser.pages[0] || (await browser.newPage());
 
-  const page = await browser.newPage();
-
-  // set cookies for headless-forgetfulness
-  await setCookies(page);
+  // windows?
+  page.setUserAgent(
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36'
+  );
 
   return page;
 };

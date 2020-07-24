@@ -51,10 +51,7 @@ const app = async ({ friend, service }) => {
     );
   }
 
-  // we can't have an asynchronous constructor, so we initialize and pass
-  // page here, to reduce duplication;
-  const page = await getPage();
-  const program = new Service(page);
+  const program = new Service();
 
   await program.navigateToURL();
 
