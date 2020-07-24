@@ -19,6 +19,9 @@ const cli = meow(`${chalk.black.bgGreenBright(' HEY NOW ')}
     --executable-path="/path/to/chromium"
       specify an executable to launch
 
+    --debug
+      show debug messages
+
   Input
     service   
       whatsapp | hangouts | messenger | slack
