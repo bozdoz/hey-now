@@ -1,4 +1,5 @@
 node_modules
 .puppeteer-user*
 screenshots
-cookies.json
+browser
+.vscode
