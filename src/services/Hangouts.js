@@ -1,12 +1,15 @@
 const {
   errors: { TimeoutError },
-} = require('puppeteer');
+} = require('puppeteer-core');
 const Service = require('./Service');
 const { wait } = require('../util');
 
 class Hangouts extends Service {
   async navigateToURL() {
-    await this.page.goto('https://hangouts.google.com');
+    const url = 'https://hangouts.google.com';
+
+    await this.getPage(url);
+
     try {
       this.friendFrame = await this.getFrame('#hangout-landing-chat > iframe');
     } catch (e) {
