@@ -1,14 +1,15 @@
 const {
   errors: { TimeoutError },
-} = require('puppeteer');
+} = require('puppeteer-core');
 const { wait } = require('../util');
 const Service = require('./Service');
 
 class Messenger extends Service {
   async navigateToURL() {
-    await this.page.goto('https://messenger.com');
+    const url = 'https://messenger.com';
+    const page = await this.getPage(url);
     try {
-      await this.page.waitForSelector('[aria-label="Conversations"]');
+      await page.waitForSelector('[aria-label="Conversations"]');
     } catch (e) {
       if (e instanceof TimeoutError) {
         // eslint-disable-next-line no-console

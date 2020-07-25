@@ -1,49 +1,39 @@
-const puppeteer = require('puppeteer');
+const path = require('path');
+const puppeteer = require('puppeteer-core');
 const { getConfig } = require('./config');
+const getChromeVersion = require('./getChromeVersion');
+const { DEFAULT_CHROMIUM_ARGS } = require('./constants');
+const logger = require('./logger');
 
-const getPage = async () => {
-  const { firefox, headless, executablePath } = getConfig();
+const log = logger('getPage');
+
+const getPage = async (url) => {
+  const { headless, executablePath } = getConfig();
+
+  // user data dir saves logins, cookies, etc
+  const userDataDir = path.resolve('.puppeteer-user');
+  // --app removes toolbars etc
+  const args = [...DEFAULT_CHROMIUM_ARGS, `--app=${url}`];
 
   /** @type {puppeteer.LaunchOptions} */
   const options = {
+    args,
     headless,
-    // user data dir saves logins, cookies, etc
-    userDataDir: '~/.puppeteer-user',
-    handleSIGINT: false,
-    args: ['--no-default-browser-check'],
-    ignoreDefaultArgs: ['--enable-automation'],
+    userDataDir,
+    devtools: false,
+    executablePath: executablePath || (await getChromeVersion()),
   };
 
-  if (firefox) {
-    const browserFetcher = puppeteer.createBrowserFetcher({
-      product: 'firefox',
-    });
-    const revisionInfo = await browserFetcher.download('77');
-
-    options.executablePath = revisionInfo.executablePath;
-    options.product = 'firefox';
-  }
-
-  // adds any chromium/firefox(?) product
-  if (executablePath) {
-    options.executablePath = executablePath;
-  }
+  log(options);
 
   const browser = await puppeteer.launch(options);
+  /** @type {import('puppeteer-core').Page} */
+  const page = browser.pages[0] || (await browser.newPage());
 
-  // don't throw errors if user cancels
-  process.on('SIGINT', () =>
-    browser
-      .close()
-      .then(() => process.exit(0))
-      .catch(() => process.exit(0))
+  // windows?
+  page.setUserAgent(
+    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/73.0.3683.103 Safari/537.36'
   );
-
-  // no need to open a new page if browser starts with one
-  const pages = await browser.pages();
-  const page = pages[0] || (await browser.newPage());
-
-  page.on('close', () => process.exit(0));
 
   return page;
 };

@@ -7,7 +7,7 @@ const { setConfig } = require('./config');
 const cli = meow(`${chalk.black.bgGreenBright(' HEY NOW ')}
 
   Usage
-    $ npm start <service> "<friend>"
+    $ hey-now <service> "<friend>"
 
   Options
     --slack-url
@@ -16,11 +16,11 @@ const cli = meow(`${chalk.black.bgGreenBright(' HEY NOW ')}
     --no-headless
       open a browser window
 
-    --firefox
-      open a firefox window
-
     --executable-path="/path/to/chromium"
       specify an executable to launch
+
+    --debug
+      show debug messages
 
   Input
     service   

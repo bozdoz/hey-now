@@ -1,6 +1,6 @@
 const {
   errors: { TimeoutError },
-} = require('puppeteer');
+} = require('puppeteer-core');
 const chalk = require('chalk');
 const Service = require('./Service');
 const { wait, wordCount } = require('../util');
@@ -21,12 +21,12 @@ class Slack extends Service {
     }
 
     // get slack url
-    await this.page.goto(slackUrl);
+    const page = await this.getPage(slackUrl);
 
     // check if login
     try {
-      const login = await this.page.$('#email');
-      const password = await this.page.$('#password');
+      const login = await page.$('#email');
+      const password = await page.$('#password');
 
       if (login && password) {
         // eslint-disable-next-line no-console
@@ -43,7 +43,7 @@ class Slack extends Service {
     }
 
     try {
-      await this.page.waitForSelector('#channel_sidebar_aria_label');
+      await page.waitForSelector('#channel_sidebar_aria_label');
     } catch (e) {
       if (e instanceof TimeoutError) {
         // eslint-disable-next-line no-console
